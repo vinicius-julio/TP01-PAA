@@ -1,11 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define MODOANALISE 0 //1 para ativado, 0 para desativado
+#define MODOANALISE 0 //1 para ativado 0 para desativado
 
 int main() {
     int opcaoMenu, valor, i, j, nRecursoes;
     opcaoMenu = 0;
+    i = 0;
+    j = 0;
     char arquivo[25], valorAux;
     strcpy(arquivo, ""); //inicializando arquivo como vazio
     FILE *arq;
@@ -39,12 +41,7 @@ int main() {
                     if(valor == EOF){ //se esse valor for o final da leitura, encerramos o while
                         break;
                     }
-                    /*quando valorAux for uma quebra de linha, aumenta a linha e zera a coluna
-                    ex:
-                    012 <- quando no fim da linha, o i vai passar a valer 1 e a coluna que era 3 volta pra 0
-                    345
-                    678
-                    */
+                    /*quando valorAux for uma quebra de linha, aumenta a linha e zera a coluna*/
                     if(valorAux == '\n'){
                         i++;
                         j = 0;
