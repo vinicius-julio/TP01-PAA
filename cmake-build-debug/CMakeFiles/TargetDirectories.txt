@@ -1,0 +1,3 @@
+C:/Users/vburi/Documents/UFV/PAA/TP01-PAA/cmake-build-debug/CMakeFiles/TP01_PAA.dir
+C:/Users/vburi/Documents/UFV/PAA/TP01-PAA/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/vburi/Documents/UFV/PAA/TP01-PAA/cmake-build-debug/CMakeFiles/rebuild_cache.dir
