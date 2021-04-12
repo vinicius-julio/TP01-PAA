@@ -6,11 +6,27 @@
 
 #IncludeRegexTransform: 
 
-C:/Users/vburi/Documents/UFV/PAA/TP01-PAA/main.c
+C:/Users/vburi/Documents/UFV/PAA/TP01-PAA/Estudante.h
+ListaCaminhoPercorrido.h
+C:/Users/vburi/Documents/UFV/PAA/TP01-PAA/ListaCaminhoPercorrido.h
+
+C:/Users/vburi/Documents/UFV/PAA/TP01-PAA/GeraLabirinto.h
+
+C:/Users/vburi/Documents/UFV/PAA/TP01-PAA/Labirinto.h
+Estudante.h
+C:/Users/vburi/Documents/UFV/PAA/TP01-PAA/Estudante.h
+
+C:/Users/vburi/Documents/UFV/PAA/TP01-PAA/ListaCaminhoPercorrido.h
 stdio.h
 -
 stdlib.h
 -
 string.h
 -
+
+C:/Users/vburi/Documents/UFV/PAA/TP01-PAA/main.c
+Labirinto.h
+C:/Users/vburi/Documents/UFV/PAA/TP01-PAA/Labirinto.h
+GeraLabirinto.h
+C:/Users/vburi/Documents/UFV/PAA/TP01-PAA/GeraLabirinto.h
 

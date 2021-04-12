@@ -37,7 +37,7 @@ void imprimirLabirinto(Labirinto *labirinto){
     printf("Numero de linhas: %d\n", labirinto->num_linhas);
     printf("Numero de Colunas: %d\n", labirinto->num_colunas);    
     imprimirMatrizConfiguracaoLabirinto(labirinto);
-    imprimirMatrizPosicoesVisitadasLabirinto(labirinto);
+    //imprimirMatrizPosicoesVisitadasLabirinto(labirinto);
     imprimirEstudante(labirinto->estudante);
 }
 

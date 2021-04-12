@@ -1,16 +1,18 @@
 /* 
  * File:   main.c
- * Authors: Matheus Freitas Martins (3031) / Vinicius Haner / Lucas Costa
+ * Authors: Matheus Freitas Martins (3031) / Vinicius Barbosa (3495) / Lucas Barros (3511)
  *
 */
 
 #include "Labirinto.h"
+#include "GeraLabirinto.h"
+#define MODOANALISE 1
 
 /*
  * 
  */
 int main(int argc, char** argv) {
-    int opcaoMenu, valor, i, j, num_movimentos;
+    int opcaoMenu, opcaoDificuldade, valor, i, j, num_movimentos;
     opcaoMenu = 1;    
     char arquivo[25], valorAux;
     strcpy(arquivo, ""); //inicializando arquivo como vazio
@@ -19,23 +21,24 @@ int main(int argc, char** argv) {
     Labirinto *labirinto;
     int **matriz_labirinto;
 
-    while(opcaoMenu==1 || opcaoMenu ==2){
-        printf("PROGRAMA Labirinto: Opcoes do programa:\n");
-        //printf("Opcoes do programa:\n");
+    while(opcaoMenu==1 || opcaoMenu==2 || opcaoMenu==3){
+        printf("PROGRAMA Labirinto:\n");
+        printf("Opcoes do programa:\n");
         printf("1) Carregar novo arquivo de dados.\n");
         printf("2) Processar e exibir resposta.\n");
-        printf("3 ou qualquer outro caracter) Sair do programa.\n");
-        printf("Digite um numero: ");
+        printf("3) Gerar um labirinto\n");
+        printf("0) Sair do programa.\n");
+        printf("Digite um numero: \n");
         scanf("%d", &opcaoMenu);
 
         switch(opcaoMenu) {
             case 1: // abre arquivo
-                printf("Por favor digite o nome do arquivo: ");
+                printf("Por favor digite o nome do arquivo: \n");
                 scanf("%s", arquivo);
                 arq = fopen(arquivo, "r");
                 while (!arq){
                     printf("Erro ao ler o arquivo! \n");
-                    printf("Por favor digite o nome do arquivo: ");
+                    printf("Por favor digite o nome do arquivo: \n");
                     scanf("%s", arquivo);
                     arq = fopen(arquivo, "r");
                 }
@@ -93,6 +96,41 @@ int main(int argc, char** argv) {
                     strcpy(arquivo, "");
                 }
                 break;
+
+            case 3:
+                printf("Selecione a dificuldade do labirinto:\n");
+                printf("1 - Facil (Tamanho entre 4x4 e 10x10)\n");
+                printf("2 - Medio (Tamanho entre 10x10 e 30x30)\n");
+                printf("3 - Dificil (Tamanho entre 30x30 e 50x50)\n");
+                printf("0 - Voltar\n");
+                scanf("%d", &opcaoDificuldade);
+                switch (opcaoDificuldade) {
+                    case 1: // Facil
+                        DificuldadeFacil();
+                        printf("Labirinto Criado com Sucesso!\n");
+                        system("read -p 'Pressione Enter para continuar...' var");
+                        break;
+                    case 2: // Medio
+                        DificuldadeMedia();
+                        printf("Labirinto Criado com Sucesso!\n");
+                        system("read -p 'Pressione Enter para continuar...' var");
+                        break;
+                    case 3: // Dificil (muito provavel nao ter saida)
+                        DificuldadeDificil();
+                        printf("Labirinto Criado com Sucesso!\n");
+                        system("read -p 'Pressione Enter para continuar...' var");
+                        break;
+                    case 0:
+                        break;
+                    default:
+                        printf("Opção Invalida!\n");
+                        system("read -p 'Pressione Enter para continuar...' var");
+                        break;
+                }
+                break;
+
+
+
 
         }
     }

@@ -1,6 +1,6 @@
 /* 
  * File:   Labirinto.h
- * Authors: Matheus Freitas Martins (3031) / Vinicius Haner / Lucas Costa
+ * Authors: Matheus Freitas Martins (3031) / Vinicius Barbosa (3495) / Lucas Costa (3511)
  *
  */
 
