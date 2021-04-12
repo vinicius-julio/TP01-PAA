@@ -1,7 +1,3 @@
-//
-// Created by vburi on 10/04/2021.
-//
-
 #include "GeraLabirinto.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,7 +6,7 @@
 void DificuldadeFacil(){ // Labirintos de tamanho entre 4x4 e 10x10
     srand( (unsigned)time(NULL) );
     int linha = 0, coluna = 0, nChaves = 0, valor = 0, linhaEstudante = 0, colunaEstudante = 0;
-    char arquivo[30];
+    char arquivo[25];
     FILE *arq;
     linha = 4 + rand() % 7;
     linhaEstudante = rand() % linha; // estudante fica em uma posição aleatoria da linha
