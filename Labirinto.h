@@ -42,15 +42,10 @@ extern "C" {
             int num_colunas, int ***matriz_labirinto, int qtd_chaves_jogador);
     void imprimirLabirinto(Labirinto *labirinto);
     void imprimirMatrizConfiguracaoLabirinto(Labirinto *labirinto);
-    void imprimirMatrizPosicoesVisitadasLabirinto(Labirinto *labirinto);
-    int validarMovimentacaoParedePorta(Labirinto *labirinto, int prox_linha, int prox_coluna);
-    int moverParaCima(Labirinto *labirinto);
-    int moverParaBaixo(Labirinto *labirinto);
-    int moverParaDireita(Labirinto *labirinto);
-    int moverParaEsquerda(Labirinto *labirinto);       
-    void desfazerMovimento(Labirinto *labirinto, int linha_anterior, int coluna_anterior);
+    void imprimirMatrizPosicoesVisitadasLabirinto(Labirinto *labirinto);    
     void freeLabirinto(Labirinto **labirinto);
-    int movimenta_estudante(Labirinto *labirinto);    
+    int resolverLabirinto(Labirinto *labirinto);
+    int movimenta_estudante(Labirinto *labirinto, int linha, int coluna);    
     
 
 

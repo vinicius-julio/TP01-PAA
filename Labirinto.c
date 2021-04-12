@@ -26,7 +26,7 @@ void inicializarLabirinto(Labirinto **labirinto, int num_linhas,
         }
     }
     if(MODOANALISE){
-        (*labirinto)->nivel_recursividade = 0;
+        (*labirinto)->nivel_recursividade = -1;
         (*labirinto)->max_nivel_recursividade = 0;
         (*labirinto)->num_recursoes = -1;
     }
@@ -65,117 +65,73 @@ void imprimirMatrizPosicoesVisitadasLabirinto(Labirinto *labirinto){
     printf("\n");
 }
 
-int validarMovimentacaoParedePorta(Labirinto *labirinto, int prox_linha, int prox_coluna){    
-    if(labirinto->v[prox_linha][prox_coluna] == VISITADO)
-        return MOVIMENTO_PROIBIDO;
-    if(labirinto->m[prox_linha][prox_coluna] == AZUL_PAREDE) 
-        return MOVIMENTO_PROIBIDO;    
-    if(labirinto->m[prox_linha][prox_coluna] == VERMELHO_PORTA){
-        if(labirinto->estudante->qtd_chaves_restantes == 0)
-            return MOVIMENTO_PROIBIDO;
-        labirinto->estudante->qtd_chaves_restantes--;        
-    }            
-    labirinto->estudante->linha = prox_linha;
-    labirinto->estudante->coluna = prox_coluna;
-    return MOVIMENTO_REALIZADO;
+int resolverLabirinto(Labirinto *labirinto){
+    if(movimenta_estudante(labirinto, labirinto->estudante->linha-1, labirinto->estudante->coluna) == CHEGOU_AO_OBJETIVO) // para cima
+        return CHEGOU_AO_OBJETIVO;
+    if(movimenta_estudante(labirinto, labirinto->estudante->linha, labirinto->estudante->coluna-1) == CHEGOU_AO_OBJETIVO) // para esquerda
+        return CHEGOU_AO_OBJETIVO;
+    if(movimenta_estudante(labirinto, labirinto->estudante->linha, labirinto->estudante->coluna+1) == CHEGOU_AO_OBJETIVO) // para direita
+        return CHEGOU_AO_OBJETIVO;
+    if(movimenta_estudante(labirinto, labirinto->estudante->linha+1, labirinto->estudante->coluna) == CHEGOU_AO_OBJETIVO) // para baixo
+        return CHEGOU_AO_OBJETIVO;
+    return NAO_CHEGOU_AO_OBJETIVO;
 }
 
-int moverParaCima(Labirinto *labirinto){
-    int prox_linha = labirinto->estudante->linha - 1;
-    int prox_coluna = labirinto->estudante->coluna;
-    if(prox_linha < 0) return MOVIMENTO_PROIBIDO;
-    return validarMovimentacaoParedePorta(labirinto, prox_linha, prox_coluna);
-}
-
-int moverParaBaixo(Labirinto *labirinto){
-    int prox_linha = labirinto->estudante->linha + 1;
-    int prox_coluna = labirinto->estudante->coluna;
-    if(prox_linha == labirinto->num_linhas) 
-        return MOVIMENTO_PROIBIDO;
-    return validarMovimentacaoParedePorta(labirinto, prox_linha, prox_coluna);
-}
-
-int moverParaDireita(Labirinto *labirinto){
-    int prox_linha = labirinto->estudante->linha;
-    int prox_coluna = labirinto->estudante->coluna + 1;
-    if(prox_coluna == labirinto->num_colunas) 
-        return MOVIMENTO_PROIBIDO;
-    return validarMovimentacaoParedePorta(labirinto, prox_linha, prox_coluna);
-}
-
-int moverParaEsquerda(Labirinto *labirinto){
-    int prox_linha = labirinto->estudante->linha;
-    int prox_coluna = labirinto->estudante->coluna - 1;
-    if(prox_coluna < 0) 
-        return MOVIMENTO_PROIBIDO;
-    return validarMovimentacaoParedePorta(labirinto, prox_linha, prox_coluna);
-}
-
-void desfazerMovimento(Labirinto *labirinto, int linha_anterior, int coluna_anterior){
-    int linha = labirinto->estudante->linha;
-    int coluna = labirinto->estudante->coluna;
-    if(labirinto->m[linha][coluna] == VERMELHO_PORTA)
-        labirinto->estudante->qtd_chaves_restantes++;
-    labirinto->estudante->linha = linha_anterior;
-    labirinto->estudante->coluna = coluna_anterior;
-    adicionarPosicaoListaCaminhoPercorrido(labirinto->estudante->listaCaminhoPercorrido, linha_anterior, coluna_anterior);
-}
-
-int movimenta_estudante(Labirinto *labirinto){
-    int r, linha, coluna;
-    linha = labirinto->estudante->linha;
-    coluna = labirinto->estudante->coluna;
-    labirinto->v[linha][coluna] = VISITADO;
+int movimenta_estudante(Labirinto *labirinto, int linha, int coluna){
     if(MODOANALISE){
-        labirinto->num_recursoes++;        
+        labirinto->num_recursoes++;      
+        labirinto->nivel_recursividade++;
         if(labirinto->max_nivel_recursividade < labirinto->nivel_recursividade){
             labirinto->max_nivel_recursividade = labirinto->nivel_recursividade;        
         }        
     }
-    if(verificarPosicaoEstudante(labirinto->estudante) == CHEGOU_AO_OBJETIVO){
+    if(linha == 0 
+            && (labirinto->m[linha][coluna] == BRANCO_VAZIO ||
+                (labirinto->m[linha][coluna] == VERMELHO_PORTA 
+                && labirinto->estudante->qtd_chaves_restantes > 0))){
+        labirinto->v[linha][coluna] = VISITADO;
+        adicionarPosicaoListaCaminhoPercorrido(labirinto->estudante->listaCaminhoPercorrido, linha, coluna);
         return CHEGOU_AO_OBJETIVO;
-    }        
-    if(moverParaCima(labirinto) == MOVIMENTO_REALIZADO){
-        adicionarPosicaoListaCaminhoPercorrido(labirinto->estudante->listaCaminhoPercorrido, linha-1, coluna);
-        if(MODOANALISE) labirinto->nivel_recursividade++;
-        r = movimenta_estudante(labirinto);
-        if(MODOANALISE) labirinto->nivel_recursividade--;
-        if(r == CHEGOU_AO_OBJETIVO){
-            return CHEGOU_AO_OBJETIVO;        
-        } // else NAO_CHEGOU_AO_OBJETIVO
-        desfazerMovimento(labirinto, linha, coluna); // desfazendo movimento anterior        
     }
-    if(moverParaEsquerda(labirinto) == MOVIMENTO_REALIZADO){     
-        adicionarPosicaoListaCaminhoPercorrido(labirinto->estudante->listaCaminhoPercorrido, linha, coluna-1);
-        if(MODOANALISE) labirinto->nivel_recursividade++;
-        r = movimenta_estudante(labirinto);
-        if(MODOANALISE) labirinto->nivel_recursividade--;
-        if(r == CHEGOU_AO_OBJETIVO){
-            return CHEGOU_AO_OBJETIVO;        
+    
+    if(linha >= 0 && linha < labirinto->num_linhas 
+            && coluna >= 0 && coluna < labirinto->num_colunas
+            && (labirinto->m[linha][coluna] == BRANCO_VAZIO ||
+                    (labirinto->m[linha][coluna] == VERMELHO_PORTA 
+                    && labirinto->estudante->qtd_chaves_restantes > 0))                
+        ){
+        
+        adicionarPosicaoListaCaminhoPercorrido(labirinto->estudante->listaCaminhoPercorrido, linha, coluna);
+        
+        if(labirinto->v[linha][coluna] == VISITADO){
+            return NAO_CHEGOU_AO_OBJETIVO;
         }
-        desfazerMovimento(labirinto, linha, coluna);
-    }    
-    if(moverParaDireita(labirinto) == MOVIMENTO_REALIZADO){
-        adicionarPosicaoListaCaminhoPercorrido(labirinto->estudante->listaCaminhoPercorrido, linha, coluna+1);
-        if(MODOANALISE) labirinto->nivel_recursividade++;
-        r = movimenta_estudante(labirinto);
-        if(MODOANALISE) labirinto->nivel_recursividade--;
-        if(r == CHEGOU_AO_OBJETIVO){
+        
+        labirinto->v[linha][coluna] = VISITADO;
+        
+        if(labirinto->m[linha][coluna] == VERMELHO_PORTA)
+            labirinto->estudante->qtd_chaves_restantes--;
+                
+        if(movimenta_estudante(labirinto, linha-1, coluna) == CHEGOU_AO_OBJETIVO) // para cima
             return CHEGOU_AO_OBJETIVO;        
-        }
-        desfazerMovimento(labirinto, linha, coluna);
+        
+        if(movimenta_estudante(labirinto, linha, coluna-1) == CHEGOU_AO_OBJETIVO) // para esquerda
+            return CHEGOU_AO_OBJETIVO;
+        
+        if(movimenta_estudante(labirinto, linha, coluna+1) == CHEGOU_AO_OBJETIVO) // para direita
+            return CHEGOU_AO_OBJETIVO;
+        
+        if(movimenta_estudante(labirinto, linha+1, coluna) == CHEGOU_AO_OBJETIVO) // para baixo
+            return CHEGOU_AO_OBJETIVO;
+        
+        labirinto->v[linha][coluna] = NAO_VISITADO;
+        if(labirinto->m[linha][coluna] == VERMELHO_PORTA)
+            labirinto->estudante->qtd_chaves_restantes++;
+        if(MODOANALISE) 
+            labirinto->nivel_recursividade--;
+        adicionarPosicaoListaCaminhoPercorrido(labirinto->estudante->listaCaminhoPercorrido, linha, coluna);
+        return NAO_CHEGOU_AO_OBJETIVO;
     }
-    if(moverParaBaixo(labirinto) == MOVIMENTO_REALIZADO){
-        adicionarPosicaoListaCaminhoPercorrido(labirinto->estudante->listaCaminhoPercorrido, linha+1, coluna);
-        if(MODOANALISE) labirinto->nivel_recursividade++;
-        r = movimenta_estudante(labirinto);
-        if(MODOANALISE) labirinto->nivel_recursividade--;
-        if(r == CHEGOU_AO_OBJETIVO){     
-            return CHEGOU_AO_OBJETIVO;        
-        }
-        desfazerMovimento(labirinto, linha, coluna);
-    }
-    return NAO_CHEGOU_AO_OBJETIVO;
 }
 
 void freeLabirinto(Labirinto **labirinto){

@@ -79,7 +79,7 @@ int main(int argc, char** argv) {
                     system("read -p 'Pressione Enter para continuar...' var");
                 }else {
                     //codigo para movimentar o aluno
-                    movimenta_estudante(labirinto);                    
+                    resolverLabirinto(labirinto);
                     imprimirListaCaminhoPercorrido(labirinto->estudante->listaCaminhoPercorrido);
                     num_movimentos = retornarNumeroMovimentos(labirinto->estudante->listaCaminhoPercorrido);
                     if(labirinto->estudante->listaCaminhoPercorrido->ultimo->linha == 0)
