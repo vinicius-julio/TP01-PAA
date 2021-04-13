@@ -137,9 +137,9 @@ int movimenta_estudante(Labirinto *labirinto, int linha, int coluna){
         if(labirinto->m[linha][coluna] == VERMELHO_PORTA)
             labirinto->estudante->qtd_chaves_restantes++;
         labirinto->nivel_recursividade--;
-        adicionarPosicaoListaCaminhoPercorrido(labirinto->estudante->listaCaminhoPercorrido, linha, coluna);
-        return NAO_CHEGOU_AO_OBJETIVO;
+        adicionarPosicaoListaCaminhoPercorrido(labirinto->estudante->listaCaminhoPercorrido, linha, coluna);        
     }
+    return NAO_CHEGOU_AO_OBJETIVO;    
 }
 
 void freeLabirinto(Labirinto **labirinto){
