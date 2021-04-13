@@ -5,7 +5,9 @@ void inicializarLabirinto(Labirinto **labirinto, int num_linhas,
     int i, j;
     (*labirinto) = (Labirinto*) malloc(sizeof(Labirinto));
     (*labirinto)->num_linhas = num_linhas;
-    (*labirinto)->num_colunas = num_colunas;        
+    (*labirinto)->num_colunas = num_colunas;   
+    (*labirinto)->limite_nivel_recursividade = 0; // 0 significa para ignorar, ou seja, nao ha limite
+    (*labirinto)->imprimir_movimentos = 1;
     (*labirinto)->m = *matriz_labirinto;
     for(i = 0; i < num_linhas; i++){
         for(j = 0; j < num_colunas; j++){
@@ -37,7 +39,6 @@ void imprimirLabirinto(Labirinto *labirinto){
     printf("Numero de linhas: %d\n", labirinto->num_linhas);
     printf("Numero de Colunas: %d\n", labirinto->num_colunas);    
     imprimirMatrizConfiguracaoLabirinto(labirinto);
-    //imprimirMatrizPosicoesVisitadasLabirinto(labirinto);
     imprimirEstudante(labirinto->estudante);
 }
 
@@ -78,20 +79,24 @@ int resolverLabirinto(Labirinto *labirinto){
 }
 
 int movimenta_estudante(Labirinto *labirinto, int linha, int coluna){
-    if(MODOANALISE){
-        labirinto->num_recursoes++;      
-        labirinto->nivel_recursividade++;
-        if(labirinto->max_nivel_recursividade < labirinto->nivel_recursividade){
-            labirinto->max_nivel_recursividade = labirinto->nivel_recursividade;        
-        }        
-    }
+    labirinto->num_recursoes++;
+        
     if(linha == 0 
             && (labirinto->m[linha][coluna] == BRANCO_VAZIO ||
                 (labirinto->m[linha][coluna] == VERMELHO_PORTA 
-                && labirinto->estudante->qtd_chaves_restantes > 0))){
+                && labirinto->estudante->qtd_chaves_restantes > 0))){        
+        labirinto->nivel_recursividade++;
+        if(labirinto->max_nivel_recursividade < labirinto->nivel_recursividade){
+            labirinto->max_nivel_recursividade = labirinto->nivel_recursividade;        
+        }
         labirinto->v[linha][coluna] = VISITADO;
         adicionarPosicaoListaCaminhoPercorrido(labirinto->estudante->listaCaminhoPercorrido, linha, coluna);
         return CHEGOU_AO_OBJETIVO;
+    }
+    
+    if(labirinto->limite_nivel_recursividade != 0 && 
+            labirinto->nivel_recursividade+1 > labirinto->limite_nivel_recursividade){
+        return NAO_CHEGOU_AO_OBJETIVO;        
     }
     
     if(linha >= 0 && linha < labirinto->num_linhas 
@@ -101,13 +106,17 @@ int movimenta_estudante(Labirinto *labirinto, int linha, int coluna){
                     && labirinto->estudante->qtd_chaves_restantes > 0))                
         ){
         
-        adicionarPosicaoListaCaminhoPercorrido(labirinto->estudante->listaCaminhoPercorrido, linha, coluna);
-        
         if(labirinto->v[linha][coluna] == VISITADO){
             return NAO_CHEGOU_AO_OBJETIVO;
         }
         
         labirinto->v[linha][coluna] = VISITADO;
+        labirinto->nivel_recursividade++;
+        if(labirinto->max_nivel_recursividade < labirinto->nivel_recursividade){
+            labirinto->max_nivel_recursividade = labirinto->nivel_recursividade;        
+        }
+        
+        adicionarPosicaoListaCaminhoPercorrido(labirinto->estudante->listaCaminhoPercorrido, linha, coluna);
         
         if(labirinto->m[linha][coluna] == VERMELHO_PORTA)
             labirinto->estudante->qtd_chaves_restantes--;
@@ -127,8 +136,7 @@ int movimenta_estudante(Labirinto *labirinto, int linha, int coluna){
         labirinto->v[linha][coluna] = NAO_VISITADO;
         if(labirinto->m[linha][coluna] == VERMELHO_PORTA)
             labirinto->estudante->qtd_chaves_restantes++;
-        if(MODOANALISE) 
-            labirinto->nivel_recursividade--;
+        labirinto->nivel_recursividade--;
         adicionarPosicaoListaCaminhoPercorrido(labirinto->estudante->listaCaminhoPercorrido, linha, coluna);
         return NAO_CHEGOU_AO_OBJETIVO;
     }

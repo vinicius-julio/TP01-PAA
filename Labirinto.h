@@ -33,9 +33,11 @@ extern "C" {
         Estudante *estudante; // guarda posicao e quantidade de chaves restantes
         int **m; // matriz do labirinto
         int **v; // matriz de posicoes visitadas
-        int nivel_recursividade;
-        int max_nivel_recursividade;
-        int num_recursoes;
+        unsigned long nivel_recursividade;
+        unsigned long max_nivel_recursividade;
+        unsigned long num_recursoes;
+        unsigned long limite_nivel_recursividade;
+        int imprimir_movimentos;
     } Labirinto;
     
     void inicializarLabirinto(Labirinto **labirinto, int num_linhas, 

@@ -41,8 +41,7 @@ void freeListaCaminhoPercorrido(ListaCaminhoPercorrido **lista){
         return;
     ListaCaminhoPercorrido *r2 = *lista;
     ItemListaCaminhoPercorrido *item = r2->primeiro;
-    ItemListaCaminhoPercorrido *r;        
-    int qtd_movimentos = -1, coluna;
+    ItemListaCaminhoPercorrido *r;  
     while(item != NULL){
         r = item;
         item = item->prox;
